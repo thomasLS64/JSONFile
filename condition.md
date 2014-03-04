@@ -36,7 +36,7 @@ NBELT correspond au nombre d'enregistrement à récupérer après le START.
 
 
 
-## join
+## join vertical
 Permet d'extraire deux fichiers en une fois
 
 #### Appel
