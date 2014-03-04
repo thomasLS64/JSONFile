@@ -63,4 +63,5 @@ ATTRIBUT2 correspond à un attribut de monFichier2
 
 #### Deux concaténations
 La concaténation "with" ajoute monFichier2 dans monFichier1 en fonction de la condition s'il y en a une.
+
 La concaténation "delete" ajoute monFichier2 dans monFichier1 en fonction de la condition et si celle-ci n'est pas respecter les enregistrement ne sont pas affichés
