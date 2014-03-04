@@ -115,107 +115,80 @@ class JSONFile {
 	function condition($c, $data) {
 		// Condition : where
 		if($c[0] === 'where') {
-			if($c[1] === 'id') {
-				// Egalité
-				if($c[2] === '=') {
-					if(@$data[$c[3]])
-						$data = $data[$c[3]];
-					else
-						return false;
-				}
+			if($c[1] != 'id' && count($c) > 4) {
+				for($i=4; $i<count($c); $i++)
+					$c[3] .= ' '.$c[$i];
+			}
 
-				// Inégalité
-				if($c[2] === '!=') {
-					foreach($data as $id=>$v) {
-						if($id === $c[3])
-							unset($data[$id]);
-					}
-				}
-
-				// Supérieur ou égale
-				if($c[2] === '>=') {
-					foreach($data as $id=>$v) {
-						if($id < $c[3])
-							unset($data[$id]);
-					}
-				}
-
-				// Inférieur ou égale
-				if($c[2] === '<=') {
-					foreach($data as $id=>$v) {
-						if($id > $c[3])
-							unset($data[$id]);
-					}
-				}
-
-				// Strictement supérieur
-				if($c[2] === '>') {
-					foreach($data as $id=>$v) {
-						if($id <= $c[3])
-							unset($data[$id]);
-					}
-				}
-
-				// Strictement inférieur
-				if($c[2] === '<') {
-					foreach($data as $id=>$v) {
-						if($id >= $c[3])
-							unset($data[$id]);
-					}
+			// Egalité
+			if($c[2] === '=') {
+				foreach($data as $id=>$v) {
+					if($c[1] === 'id')
+						$att = $id;
+					else 
+						$att = $v[$c[1]];
+					if($att != $c[3])
+						unset($data[$id]);
 				}
 			}
-			else {
-				if(count($c) > 4) {
-					for($i=4; $i<count($c); $i++)
-						$c[3] .= ' '.$c[$i];
-				}
 
-				// Egalité
-				if($c[2] === '=') {
-					foreach($data as $id=>$v) {
-						if($v[$c[1]] != $c[3])
-							unset($data[$id]);
-					}
+			// Inégalité
+			if($c[2] === '!=') {
+				foreach($data as $id=>$v) {
+					if($c[1] === 'id')
+						$att = $id;
+					else 
+						$att = $v[$c[1]];
+					if($att === $c[3])
+						unset($data[$id]);
 				}
+			}
 
-				// Inégalité
-				if($c[2] === '!=') {
-					foreach($data as $id=>$v) {
-						if($v[$c[1]] === $c[3])
-							unset($data[$id]);
-					}
+			// Supérieur ou égal
+			if($c[2] === '>=') {
+				foreach($data as $id=>$v) {
+					if($c[1] === 'id')
+						$att = $id;
+					else 
+						$att = $v[$c[1]];
+					if($att < $c[3])
+						unset($data[$id]);
 				}
+			}
 
-				// Supérieur ou égal
-				if($c[2] === '>=') {
-					foreach($data as $id=>$v) {
-						if($v[$c[1]] < $c[3])
-							unset($data[$id]);
-					}
+			// Inférieur ou égal
+			if($c[2] === '<=') {
+				foreach($data as $id=>$v) {
+					if($c[1] === 'id')
+						$att = $id;
+					else 
+						$att = $v[$c[1]];
+					if($att > $c[3])
+						unset($data[$id]);
 				}
+			}
 
-				// Inférieur ou égal
-				if($c[2] === '<=') {
-					foreach($data as $id=>$v) {
-						if($v[$c[1]] > $c[3])
-							unset($data[$id]);
-					}
+			// Strictement supérieur
+			if($c[2] === '>') {
+				foreach($data as $id=>$v) {
+					if($c[1] === 'id')
+						$att = $id;
+					else 
+						$att = $v[$c[1]];
+					if($att <= $c[3])
+						unset($data[$id]);
 				}
+			}
 
-				// Strictement supérieur
-				if($c[2] === '>') {
-					foreach($data as $id=>$v) {
-						if($v[$c[1]] <= $c[3])
-							unset($data[$id]);
-					}
-				}
-
-				// Strictement inférieur
-				if($c[2] === '<') {
-					foreach($data as $id=>$v) {
-						if($v[$c[1]] >= $c[3])
-							unset($data[$id]);
-					}
+			// Strictement inférieur
+			if($c[2] === '<') {
+				foreach($data as $id=>$v) {
+					if($c[1] === 'id')
+						$att = $id;
+					else 
+						$att = $v[$c[1]];
+					if($att >= $c[3])
+						unset($data[$id]);
 				}
 			}
 		}
@@ -248,9 +221,11 @@ class JSONFile {
 
 		// Condition : join
 		if($c[0] === 'join') {
-			if($join = $this->read($c[1])) {
-				foreach($join as $v)
-					$data[] = $v;
+			if($join = $this->read($c[2])) {
+				if($c[1] === 'vertical') {
+					foreach($join as $v)
+						$data[] = $v;
+				}
 			}
 		}
 		//Fin condition : join
@@ -258,154 +233,106 @@ class JSONFile {
 		// Condition : concatenate
 		if($c[0] === 'concatenate') {
 			if($concatenate = $this->read($c[2])) {
-				if($c[3] === 'on') {
-					if($c[1] === 'with') {
-						foreach($data as $id=>$v) {
-							foreach($concatenate as $cid=>$cv) {
-								$dATT1 = $data[$id][$c[4]];
-								$dATT2 = $concatenate[$cid][$c[6]];
-								if($c[4] === 'id')
-									$dATT1 = $id;
-								if($c[6] === 'id')
-									$dATT2 = $cid;
-
-								// Egalité
-								if($c[5] === '=') {
-									if($dATT1 === $dATT2) {
-										foreach($cv as $att=>$val) {
-												$data[$id][$att] .= $val;
-										}
-									}
-								}
-
-								// Inégalité
-								if($c[5] === '!=') {
-									if($dATT1 != $dATT2) {
-										foreach($cv as $att=>$val) {
-												$data[$id][$att] .= $val;
-										}
-									}
-								}
-
-								// Supérieur ou égal
-								if($c[5] === '>=') {
-									if($dATT1 >= $dATT2) {
-										foreach($cv as $att=>$val) {
-												$data[$id][$att] .= $val;
-										}
-									}
-								}
-
-								// Inférieur ou égal
-								if($c[5] === '<=') {
-									if($dATT1 <= $dATT2) {
-										foreach($cv as $att=>$val) {
-												$data[$id][$att] .= $val;
-										}
-									}
-								}
-
-								// Strictement supérieur
-								if($c[5] === '>') {
-									if($dATT1 > $dATT2) {
-										foreach($cv as $att=>$val) {
-												$data[$id][$att] .= $val;
-										}
-									}
-								}
-
-								// Strictement inférieur
-								if($c[5] === '>') {
-									if($dATT1 < $dATT2) {
-										foreach($cv as $att=>$val) {
-												$data[$id][$att] .= $val;
-										}
-									}
-								}
-							}
-						}
-					}
-					if($c[1] === 'delete') {
+				if(($c[1] === 'with' && $c[3] === 'on') || $c[1] === 'delete') {
+					if($c[1] === 'delete')
 						$dataFinal = [];
 
-						foreach($data as $id=>$v) {
-							foreach($concatenate as $cid=>$cv) {
-								$dATT1 = $data[$id][$c[4]];
-								$dATT2 = $concatenate[$cid][$c[6]];
-								if($c[4] === 'id')
-									$dATT1 = $id;
-								if($c[6] === 'id')
-									$dATT2 = $cid;
+					foreach($data as $id=>$v) {
+						foreach($concatenate as $cid=>$cv) {
+							$dATT1 = $data[$id][$c[4]];
+							$dATT2 = $concatenate[$cid][$c[6]];
+							if($c[4] === 'id')
+								$dATT1 = $id;
+							if($c[6] === 'id')
+								$dATT2 = $cid;
 
-								// Egalité
-								if($c[5] === '=') {
-									if($dATT1 === $dATT2) {
-										if(!$dataFinal[$id])
-											$dataFinal[$id] = $data[$id];
-										foreach($cv as $att=>$val) {
-												$dataFinal[$id][$att] .= $val;
-										}
+							// Egalité
+							if($c[5] === '=') {
+								if($dATT1 === $dATT2) {
+									if(!$dataFinal[$id] && $c[1] === 'delete')
+										$dataFinal[$id] = $data[$id];
+									foreach($cv as $att=>$val) {
+										if($c[1] === 'delete')
+											$dataFinal[$id][$att] .= $val;
+										if($c[1] === 'with')
+											$data[$id][$att] .= $val;
 									}
 								}
+							}
 
-								// Inégalité
-								if($c[5] === '!=') {
-									if($dATT1 != $dATT2) {
-										if(!$dataFinal[$id])
-											$dataFinal[$id] = $data[$id];
-										foreach($cv as $att=>$val) {
-												$dataFinal[$id][$att] .= $val;
-										}
+							// Inégalité
+							if($c[5] === '!=') {
+								if($dATT1 != $dATT2) {
+									if(!$dataFinal[$id] && $c[1] === 'delete')
+										$dataFinal[$id] = $data[$id];
+									foreach($cv as $att=>$val) {
+										if($c[1] === 'delete')
+											$dataFinal[$id][$att] .= $val;
+										if($c[1] === 'with')
+											$data[$id][$att] .= $val;
 									}
 								}
+							}
 
-								// Supérieur ou égal
-								if($c[5] === '>=') {
-									if($dATT1 >= $dATT2) {
-										if(!$dataFinal[$id])
-											$dataFinal[$id] = $data[$id];
-										foreach($cv as $att=>$val) {
-												$dataFinal[$id][$att] .= $val;
-										}
+							// Supérieur ou égal
+							if($c[5] === '>=') {
+								if($dATT1 >= $dATT2) {
+									if(!$dataFinal[$id] && $c[1] === 'delete')
+										$dataFinal[$id] = $data[$id];
+									foreach($cv as $att=>$val) {
+										if($c[1] === 'delete')
+											$dataFinal[$id][$att] .= $val;
+										if($c[1] === 'with')
+											$data[$id][$att] .= $val;
 									}
 								}
+							}
 
-								// Inférieur ou égal
-								if($c[5] === '<=') {
-									if($dATT1 <= $dATT2) {
-										if(!$dataFinal[$id])
-											$dataFinal[$id] = $data[$id];
-										foreach($cv as $att=>$val) {
-												$dataFinal[$id][$att] .= $val;
-										}
+							// Inférieur ou égal
+							if($c[5] === '<=') {
+								if($dATT1 <= $dATT2) {
+									if(!$dataFinal[$id] && $c[1] === 'delete')
+										$dataFinal[$id] = $data[$id];
+									foreach($cv as $att=>$val) {
+										if($c[1] === 'delete')
+											$dataFinal[$id][$att] .= $val;
+										if($c[1] === 'with')
+											$data[$id][$att] .= $val;
 									}
 								}
+							}
 
-								// Strictement supérieur
-								if($c[5] === '>') {
-									if($dATT1 > $dATT2) {
-										if(!$dataFinal[$id])
-											$dataFinal[$id] = $data[$id];
-										foreach($cv as $att=>$val) {
-												$dataFinal[$id][$att] .= $val;
-										}
+							// Strictement supérieur
+							if($c[5] === '>') {
+								if($dATT1 > $dATT2) {
+									if(!$dataFinal[$id] && $c[1] === 'delete')
+										$dataFinal[$id] = $data[$id];
+									foreach($cv as $att=>$val) {
+										if($c[1] === 'delete')
+											$dataFinal[$id][$att] .= $val;
+										if($c[1] === 'with')
+											$data[$id][$att] .= $val;
 									}
 								}
+							}
 
-								// Strictement inférieur
-								if($c[5] === '>') {
-									if($dATT1 < $dATT2) {
-										if(!$dataFinal[$id])
-											$dataFinal[$id] = $data[$id];
-										foreach($cv as $att=>$val) {
-												$dataFinal[$id][$att] .= $val;
-										}
+							// Strictement inférieur
+							if($c[5] === '>') {
+								if($dATT1 < $dATT2) {
+									if(!$dataFinal[$id] && $c[1] === 'delete')
+										$dataFinal[$id] = $data[$id];
+									foreach($cv as $att=>$val) {
+										if($c[1] === 'delete')
+											$dataFinal[$id][$att] .= $val;
+										if($c[1] === 'with')
+											$data[$id][$att] .= $val;
 									}
 								}
 							}
 						}
-						$data = $dataFinal;
 					}
+					if($c[1] === 'delete')
+						$data = $dataFinal;	
 				}
 				else {
 					foreach($data as $id=>$v) {

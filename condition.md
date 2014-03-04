@@ -41,9 +41,9 @@ Permet d'extraire deux fichiers en une fois
 
 #### Appel
 ``` php
-read('monFichier1', 'join monFichier2');
+read('monFichier1', 'join vertical monFichier2');
 ```
-Retournera ainsi le contenu de monFichier1 et de monFichier2
+Retournera ainsi le contenu de monFichier1 suivit du contenu de monFichier2
 
 
 ## concatenate
