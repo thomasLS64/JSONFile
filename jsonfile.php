@@ -124,11 +124,12 @@ class JSONFile {
 			if($c[2] === '=') {
 				foreach($data as $id=>$v) {
 					if($c[1] === 'id')
-						$att = $id;
-					else 
-						$att = $v[$c[1]];
-					if($att != $c[3])
-						unset($data[$id]);
+						if($id === intval($c[3]))
+							$data = $data[$id];
+					else {
+						if($v[$c[1]] != $c[3])
+							unset($data[$id]);
+					}
 				}
 			}
 
@@ -346,7 +347,11 @@ class JSONFile {
 		}
 		// Fin condition : concatenate
 
-		return $data;
+		if(count($data) > 0) {
+			return $data;
+		}
+		else 
+			return false;
 	}
 }
 ?>
