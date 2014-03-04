@@ -11,8 +11,8 @@ read('monFichier', 'where ATTRIBUT = VALEUR');
 Cette condition peut être effectuée avec les opérateurs =, <, >, <=, >=
 
 
-## order
-Permet de ranger le contenu dans un certain ordre
+## order id DESC
+Permet de ranger le contenu dans l'ordre décroissant
 
 #### Appel
 ``` php
@@ -27,6 +27,7 @@ Permet de limiter le nombre d'élément à récupérer
 ``` php
 read('monFichier', 'limit START,NBELT');
 ```
+
 
 
 ## join
@@ -47,8 +48,11 @@ Concaténe deux fichiers en fonction d'une condition ou non
 read('monFichier1', 'concatenate (with/delete) monFichier2 [on ATTRIBUT1 = ATTRIBUT2]');
 ```
 () : Choix entre les deux options
+
 [] : Optionnel avec le "concatenate with"
+
 ATTRIBUT1 correspond à un attribut de monFichier1
+
 ATTRIBUT2 correspond à un attribut de monFichier2
 
 #### Deux concaténations
