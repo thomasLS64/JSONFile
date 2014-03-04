@@ -24,7 +24,7 @@ class JSONFile {
 
 	// Supprimer un fichier
 	function removeFile($f) {
-		if(unlink($f.'.json')) { // Suppression du fichier
+		if(unlink($f.'.json')) {
 			return true;
 		}
 		else {
@@ -38,14 +38,14 @@ class JSONFile {
 **/
 	// Lecture du fichier
 	function read($f, $conditions='') {
-		if($file = @fopen($f.'.json', "r")) { // Ouverture
-			$fileJSON = fgets($file); // Lecture
-			$fileDecode = json_decode($fileJSON, true); // Décodage
-			fclose($file); // Fermeture de la lecture
+		if($file = @fopen($f.'.json', "r")) {
+			$fileJSON = fgets($file);
+			$fileDecode = json_decode($fileJSON, true);
+			fclose($file);
 			
 			$data = $fileDecode;
 
-			if(is_array($conditions)) { // Ajout des conditions
+			if(is_array($conditions)) {
 				for($k=0; $k<count($conditions); $k++) {
 					$c = explode(' ', $conditions[$k]);
 					$data = $this->condition($c, $data);
@@ -194,7 +194,7 @@ class JSONFile {
 					}
 				}
 
-				// Strcitement inférieur
+				// Strictement inférieur
 				if($c[2] === '<') {
 					foreach($data as $id=>$v) {
 						if($v[$c[1]] >= $c[3])
@@ -215,6 +215,21 @@ class JSONFile {
 		}
 		// Fin condition : order
 		
+		// Condition : limit
+		if($c[0] === 'limit') {
+			$place = 0;
+			$mark = explode(',', $c[1]);
+			$lowerMark = $mark[0];
+			$upperMark = $lowerMark+$mark[1];
+
+			foreach($data as $id=>$v) {
+				if($place < $lowerMark || $place >= $upperMark)
+					unset($data[$id]);
+				$place++;
+			}
+		}
+		// Fin condition : limit
+
 		// Condition : join
 		if($c[0] === 'join') {
 			if($join = $this->read($c[1])) {
