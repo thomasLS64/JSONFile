@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jsonfile by thomasLS64</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/thomasLS64/JSONFile">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/thomasLS64/JSONFile/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/thomasLS64/JSONFile/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Jsonfile</h1>
+          <p>Simplify uses JSON file with php</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/thomasLS64">thomasLS64</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="jsonfile" class="anchor" href="#jsonfile"><span class="octicon octicon-link"></span></a>JSONFile</h1>
+
+<p>Librairie php pour faciliter la gestion de fichier JSON.</p>
+
+<h3>
+<a name="fonctionnalit%C3%A9s" class="anchor" href="#fonctionnalit%C3%A9s"><span class="octicon octicon-link"></span></a>Fonctionnalités</h3>
+
+<ul>
+<li>Création de fichier</li>
+<li>Suppression de fichier</li>
+<li>Ajout d'élément</li>
+<li>Modification d'élément</li>
+<li>Suppression d'élément</li>
+<li>Lecture complète ou conditionnée d'un fichier</li>
+</ul><h3>
+<a name="exemples" class="anchor" href="#exemples"><span class="octicon octicon-link"></span></a>Exemples</h3>
+
+<p>Initialisation</p>
+
+<div class="highlight highlight-php"><pre><span class="k">include</span> <span class="s1">'jsonfile.php'</span><span class="p">;</span>
+<span class="nv">$JSONFile</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JSONFile</span><span class="p">;</span>
+</pre></div>
+
+<p>Création d'un fichier JSON</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$JSONFile</span><span class="o">-&gt;</span><span class="na">creatFile</span><span class="p">(</span><span class="s1">'monFichier'</span><span class="p">);</span>
+</pre></div>
+
+<p>Suppression d'un fichier</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$JSONFile</span><span class="o">-&gt;</span><span class="na">removeFile</span><span class="p">(</span><span class="s1">'monFichier'</span><span class="p">);</span>
+</pre></div>
+
+<p>Ajout d'élément dans un fichier</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$JSONFile</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'monFichier'</span><span class="p">,</span> <span class="s1">'monContenu'</span><span class="p">);</span>
+</pre></div>
+
+<p>Modification d'élément dans un fichier</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$JSONFile</span><span class="o">-&gt;</span><span class="na">modify</span><span class="p">(</span><span class="s1">'monFichier'</span><span class="p">,</span> <span class="nv">$IdElement</span><span class="p">,</span> <span class="nv">$nouvelleValeur</span><span class="p">);</span>
+</pre></div>
+
+<p>Suppression d'élément</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$JSONFile</span><span class="o">-&gt;</span><span class="na">remove</span><span class="p">(</span><span class="s1">'monFichier'</span><span class="p">,</span> <span class="nv">$IdElement</span><span class="p">);</span>
+</pre></div>
+
+<p>Lecture complète</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$JSONFile</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="s1">'monFichier'</span><span class="p">);</span>
+</pre></div>
+
+<p>Lecture conditionnée</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$condition</span> <span class="o">=</span> <span class="s1">'where id = 0'</span><span class="p">;</span> <span class="c1">// Condition simple</span>
+<span class="nx">OU</span>
+<span class="nv">$condition</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span> <span class="c1">// Condition multiple</span>
+        <span class="s1">'where id &lt; 10'</span><span class="p">,</span>
+        <span class="s1">'where id &gt;= 2'</span><span class="p">,</span>
+        <span class="s1">'order id DESC'</span>
+    <span class="p">);</span>
+<span class="nv">$JSONFile</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">(</span><span class="s1">'monFichier'</span><span class="p">,</span> <span class="nv">$condition</span><span class="p">);</span>
+</pre></div>
+
+<p>Voir les <a href="condition.md">conditions</a></p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
