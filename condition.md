@@ -1,6 +1,6 @@
 # Conditions
-### Opérateurs {OP}
-Les opérateurs possibles lorsque dans un appel il y a {OP} : =, <, >, <=, >=
+### Opï¿½rateurs {OP}
+Les opï¿½rateurs possibles lorsque dans un appel il y a {OP} : =, <, >, <=, >=
 
 ## where
 Permet d'extraire le contenu du fichier respectant la condition
@@ -10,12 +10,12 @@ Permet d'extraire le contenu du fichier respectant la condition
 read('monFichier', 'where ATTRIBUT {OP} VALEUR');
 ```
 
-#### Opérateurs
-Cette condition peut être effectuée avec les opérateurs =, <, >, <=, >=
+#### Opï¿½rateurs
+Cette condition peut ï¿½tre effectuï¿½e avec les opï¿½rateurs =, <, >, <=, >=
 
 
 ## order id DESC
-Permet de ranger le contenu dans l'ordre décroissant
+Permet de ranger le contenu dans l'ordre dï¿½croissant
 
 #### Appel
 ``` php
@@ -24,15 +24,15 @@ read('monFichier', 'order id DESC');
 
 
 ## limit
-Permet de limiter le nombre d'élément à récupérer
+Permet de limiter le nombre d'ï¿½lï¿½ment ï¿½ rï¿½cupï¿½rer
 
 #### Appel
 ``` php
 read('monFichier', 'limit START,NBELT');
 ```
-START correspond à la place du premier enregistrement à récupérer.
+START correspond ï¿½ la place du premier enregistrement ï¿½ rï¿½cupï¿½rer.
 
-NBELT correspond au nombre d'enregistrement à récupérer après le START.
+NBELT correspond au nombre d'enregistrement ï¿½ rï¿½cupï¿½rer aprï¿½s le START.
 
 
 
@@ -47,21 +47,18 @@ Retournera ainsi le contenu de monFichier1 suivit du contenu de monFichier2
 
 
 ## concatenate
-Concaténe deux fichiers en fonction d'une condition ou non
+Concatï¿½ne deux fichiers en fonction d'une condition ou non
 
 #### Appel
 ``` php
 read('monFichier1', 'concatenate (with/delete) monFichier2 [on ATTRIBUT1 {OP} ATTRIBUT2]');
 ```
-() : Choix entre les deux options
+() : Choix entre les deux options  
+[] : Optionnel avec le "concatenate with"  
+ATTRIBUT1 correspond ï¿½ un attribut de monFichier1  
+ATTRIBUT2 correspond ï¿½ un attribut de monFichier2
 
-[] : Optionnel avec le "concatenate with"
+#### Deux concatï¿½nations
+La concatï¿½nation "with" ajoute monFichier2 dans monFichier1 en fonction de la condition s'il y en a une.
 
-ATTRIBUT1 correspond à un attribut de monFichier1
-
-ATTRIBUT2 correspond à un attribut de monFichier2
-
-#### Deux concaténations
-La concaténation "with" ajoute monFichier2 dans monFichier1 en fonction de la condition s'il y en a une.
-
-La concaténation "delete" ajoute monFichier2 dans monFichier1 en fonction de la condition et si celle-ci n'est pas respecter les enregistrement ne sont pas affichés
+La concatï¿½nation "delete" ajoute monFichier2 dans monFichier1 en fonction de la condition et si celle-ci n'est pas respecter les enregistrement ne sont pas affichï¿½s
